@@ -1,0 +1,40 @@
+package org.example.kakaocommunity.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@Getter
+public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
+    private Long id;
+
+    @Column(length = 26)
+    private String title;
+
+    private String content;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
+    @ColumnDefault("0")
+    private int likeCount;
+    @ColumnDefault("0")
+    private int viewCount;
+    @ColumnDefault("0")
+    private int commentCount;
+
+    @OneToMany(mappedBy = "post")
+    List<Comment> comments = new ArrayList<>();
+
+}
