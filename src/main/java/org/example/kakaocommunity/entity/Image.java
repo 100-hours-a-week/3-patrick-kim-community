@@ -2,6 +2,7 @@ package org.example.kakaocommunity.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.kakaocommunity.common.BaseEntity;
 import org.example.kakaocommunity.entity.enums.ImageStatus;
 
 @Entity
@@ -9,7 +10,7 @@ import org.example.kakaocommunity.entity.enums.ImageStatus;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class Image {
+public class Image extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")

@@ -1,7 +1,19 @@
 package org.example.kakaocommunity.common;
 
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-// 생성일 수정일 자동생성
+import java.time.LocalDateTime;
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity{
 
+    @CreatedDate
+    LocalDateTime createdAt;
+    @LastModifiedDate
+    LocalDateTime updatedAt;
 }

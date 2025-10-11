@@ -2,6 +2,7 @@ package org.example.kakaocommunity.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.kakaocommunity.common.BaseEntity;
 
 
 @Entity
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
