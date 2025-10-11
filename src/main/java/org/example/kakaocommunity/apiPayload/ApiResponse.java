@@ -26,11 +26,13 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> of(SuccessStatus status , T data) {
 
-        return new ApiResponse<>(true,status.getMessage(), data);
+        return new ApiResponse<>(true, status.getMessage(), data);
     }
-    public static <T> ApiResponse<T> onFailure(String message, T data) {
-        return new ApiResponse<>(false, message,data);
+    // 실패한 경우 응답 생성
+    public static <T> ApiResponse<T> onFailure( String message, T data){
+        return new ApiResponse<>(false, message, data);
     }
+
 
 
 }
