@@ -28,6 +28,10 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @ColumnDefault("0")
     private int likeCount;
     @ColumnDefault("0")
