@@ -28,4 +28,15 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changeImage(Image image) {
+        this.image = image;
+    }
 }

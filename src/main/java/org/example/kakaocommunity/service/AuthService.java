@@ -110,7 +110,7 @@ public class AuthService {
         // 사용자 조회
         Integer userId = jwtUtil.getUserIdFromToken(refreshToken);
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new GeneralException(ErrorStatus._USER_NOTFOUND));
+                .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
 
         // 새로운 AccessToken 생성
         return jwtUtil.generateAccessToken(member.getId(), member.getEmail());

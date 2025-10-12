@@ -17,7 +17,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     _DUPLICATED_EMAIL(HttpStatus.CONFLICT, "중복된 이메일이 존재합니다."),
     _DUPLICATED_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임이 존재합니다."),
-    _USER_NOTFOUND(HttpStatus.NOT_FOUND,"사용자가 존재하지 않습니다." );
+    _NOTFOUND(HttpStatus.NOT_FOUND,"찾을 수 없습니다." );
 
 
 
