@@ -17,10 +17,11 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Integer id;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false, unique = true)
     private String nickname;
-    @Column(length = 320)
+    @Column(length = 320, nullable = false,unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
 
     @OneToOne
