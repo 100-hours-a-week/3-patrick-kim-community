@@ -12,10 +12,7 @@ import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostRepository;
 import org.example.kakaocommunity.service.PostService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/posts")
@@ -30,7 +27,7 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostResponseDto.CreateDto>> createPost(
             @RequestBody PostRequestDto.CreateDto createDto,
             @LoginUser Integer memberId
-            ) {
+    ) {
 
         Post savedPost = postService.getPost(createDto, memberId);
 
@@ -38,9 +35,28 @@ public class PostController {
                 .postId(savedPost.getId()).build();
 
         return ResponseEntity.status(SuccessStatus._CREATED.getCode())
-                .body(ApiResponse.of(SuccessStatus._CREATED,postResponse));
+                .body(ApiResponse.of(SuccessStatus._CREATED, postResponse));
 
     }
 
+    @PatchMapping("/{postId}")
+    public ApiResponse<PostResponseDto.UpdateDto> updatePost(
+            @PathVariable Long postId,
+            @RequestBody PostRequestDto.UpdateDto request,
+            @LoginUser Integer memberId
+    ) {
+        Post post = postService.updatePost(postId, request, memberId);
+        return ApiResponse.onSuccess(PostResponseDto.UpdateDto
+                .builder()
+                .postId(post.getId())
+                .updatedAt(post.getUpdatedAt())
+//                .postImageUrl(post.getImage().getUrl()));
+                .postImageUrl(null)
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build());
+
+
+    }
 
 }

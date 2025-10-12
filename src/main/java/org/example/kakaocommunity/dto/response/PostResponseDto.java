@@ -20,8 +20,9 @@ public class PostResponseDto {
     @Builder
     @AllArgsConstructor
     public static class UpdateDto {
-        private Integer postId;
+        private Long postId;
         private String title;
+        private String content;
         private LocalDateTime updatedAt;
         private String postImageUrl;
     }
@@ -31,7 +32,7 @@ public class PostResponseDto {
     @AllArgsConstructor
     public static class DetailDto {
         private UserInfo user;
-        private Integer postId;
+        private Long postId;
         private String title;
         private String content;
         private LocalDateTime createdAt;

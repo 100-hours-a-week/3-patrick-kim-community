@@ -42,4 +42,12 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     List<Comment> comments = new ArrayList<>();
 
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
 }
