@@ -2,8 +2,8 @@ package org.example.kakaocommunity.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.dto.request.AuthRequestDto;
-import org.example.kakaocommunity.dto.response.AuthResponseDto;
+import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
+import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.exception.GeneralException;
 import org.example.kakaocommunity.entity.RefreshToken;

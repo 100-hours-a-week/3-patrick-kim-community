@@ -3,7 +3,8 @@ package org.example.kakaocommunity.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.dto.request.CommentRequestDto;
+import org.example.kakaocommunity.controller.dto.request.CommentRequestDto;
+import org.example.kakaocommunity.controller.dto.response.CommentResponseDto;
 import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
@@ -12,6 +13,9 @@ import org.example.kakaocommunity.repository.CommentRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +43,44 @@ public class CommentService {
             throw new GeneralException(ErrorStatus._FORBIDDEN);
 
         commentRepository.delete(comment);
+    }
+
+    public CommentResponseDto.ListDto getCommentList(Long postId, Long cursorId, Integer limit) {
+        // limit + 1개를 조회하여 다음 페이지 존재 여부 확인
+        List<Comment> comments = commentRepository.findCommentsByPostIdWithCursor(postId, cursorId, limit + 1);
+
+        // 다음 페이지 존재 여부 확인
+        boolean hasNext = comments.size() > limit;
+        if (hasNext) {
+            comments = comments.subList(0, limit);
+        }
+
+        // 다음 커서 ID 계산
+        Long nextCursorId = comments.isEmpty() ? null : comments.get(comments.size() - 1).getId();
+
+        // DTO 변환
+        List<CommentResponseDto.CommentSummary> commentSummaries = comments.stream()
+                .map(this::convertToCommentSummary)
+                .collect(Collectors.toList());
+
+        return CommentResponseDto.ListDto.builder()
+                .comments(commentSummaries)
+                .nextCursorId(nextCursorId != null ? nextCursorId.intValue() : null)
+                .hasNext(hasNext)
+                .build();
+    }
+
+    private CommentResponseDto.CommentSummary convertToCommentSummary(Comment comment) {
+        Member member = comment.getMember();
+
+        return CommentResponseDto.CommentSummary.builder()
+                .user(CommentResponseDto.MemberInfo.builder()
+                        .id(member.getId().longValue())
+                        .nickname(member.getNickname())
+                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
+                        .build())
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .build();
     }
 }

@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.annotation.LoginUser;
 import org.example.kakaocommunity.apiPayload.ApiResponse;
 import org.example.kakaocommunity.apiPayload.status.SuccessStatus;
-import org.example.kakaocommunity.dto.request.CommentRequestDto;
-import org.example.kakaocommunity.dto.request.PostRequestDto;
-import org.example.kakaocommunity.dto.response.CommentResponseDto;
-import org.example.kakaocommunity.dto.response.PostResponseDto;
+import org.example.kakaocommunity.controller.dto.request.CommentRequestDto;
+import org.example.kakaocommunity.controller.dto.request.PostRequestDto;
+import org.example.kakaocommunity.controller.dto.response.CommentResponseDto;
+import org.example.kakaocommunity.controller.dto.response.PostResponseDto;
 import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.service.CommentService;
@@ -85,5 +85,17 @@ public class PostController {
         return ResponseEntity.status(SuccessStatus._CREATED.getCode())
                 .body(ApiResponse.of(SuccessStatus._CREATED,response));
 
+    }
+
+    // 댓글 목록 조회
+    @GetMapping("/{postId}/comments")
+    public ApiResponse<CommentResponseDto.ListDto> getCommentList(
+            @PathVariable Long postId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") Integer limit,
+            @LoginUser Integer memberId
+    ) {
+        CommentResponseDto.ListDto response = commentService.getCommentList(postId, cursorId, limit);
+        return ApiResponse.onSuccess(response);
     }
 }

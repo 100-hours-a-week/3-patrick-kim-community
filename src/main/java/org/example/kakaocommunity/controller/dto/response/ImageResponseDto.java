@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.dto.response;
+package org.example.kakaocommunity.controller.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

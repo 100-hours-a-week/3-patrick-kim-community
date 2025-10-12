@@ -4,12 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.annotation.LoginUser;
 import org.example.kakaocommunity.apiPayload.ApiResponse;
-import org.example.kakaocommunity.dto.request.AuthRequestDto;
-import org.example.kakaocommunity.dto.response.AuthResponseDto;
+import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
+import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
