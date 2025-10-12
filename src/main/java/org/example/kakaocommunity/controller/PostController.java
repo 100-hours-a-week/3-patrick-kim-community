@@ -11,6 +11,7 @@ import org.example.kakaocommunity.controller.dto.response.PostResponseDto;
 import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.service.CommentService;
+import org.example.kakaocommunity.service.PostLikeService;
 import org.example.kakaocommunity.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final PostLikeService postLikeService;
 
 
     // 게시글 작성
@@ -97,5 +99,26 @@ public class PostController {
     ) {
         CommentResponseDto.ListDto response = commentService.getCommentList(postId, cursorId, limit);
         return ApiResponse.onSuccess(response);
+    }
+
+
+    // 좋아요 추가
+    @PostMapping("/{postId}/likes")
+    public ApiResponse<String> like(
+            @PathVariable Long postId,
+            @LoginUser Integer memberId
+    ) {
+        postLikeService.like(postId,memberId);
+        return ApiResponse.onSuccess("좋아요 추가했습니다.");
+    }
+
+    // 좋아요 삭제
+    @DeleteMapping("/{postId}/likes")
+    public ApiResponse<String> unlike(
+            @PathVariable Long postId,
+            @LoginUser Integer memberId
+    ) {
+        postLikeService.unlike(postId,memberId);
+        return ApiResponse.onSuccess("좋아요 삭제했습니다.");
     }
 }

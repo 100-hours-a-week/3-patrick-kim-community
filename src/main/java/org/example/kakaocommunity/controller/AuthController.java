@@ -29,12 +29,12 @@ public class AuthController {
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<Void>> logout(
+    public ResponseEntity<ApiResponse<String>> logout(
             @LoginUser Integer userId
     ) {
         authService.logout(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(ApiResponse.onSuccess(null));
+                .body(ApiResponse.onSuccess("로그아웃했습니다."));
     }
 
     @PostMapping("/refresh")
