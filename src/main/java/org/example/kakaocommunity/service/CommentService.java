@@ -2,10 +2,12 @@ package org.example.kakaocommunity.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
 import org.example.kakaocommunity.dto.request.CommentRequestDto;
 import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
+import org.example.kakaocommunity.exception.GeneralException;
 import org.example.kakaocommunity.repository.CommentRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostRepository;
@@ -28,5 +30,14 @@ public class CommentService {
                 .member(member)
                 .build();
         return commentRepository.save(comment);
+    }
+
+    public void delete(Integer memberId, Long commentId) {
+        Comment comment =  commentRepository.findById(commentId).get();
+
+        if(!memberId.equals(comment.getMember().getId()))
+            throw new GeneralException(ErrorStatus._FORBIDDEN);
+
+        commentRepository.delete(comment);
     }
 }
