@@ -4,12 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.annotation.LoginUser;
 import org.example.kakaocommunity.apiPayload.ApiResponse;
 import org.example.kakaocommunity.apiPayload.status.SuccessStatus;
+import org.example.kakaocommunity.dto.request.CommentRequestDto;
 import org.example.kakaocommunity.dto.request.PostRequestDto;
+import org.example.kakaocommunity.dto.response.CommentResponseDto;
 import org.example.kakaocommunity.dto.response.PostResponseDto;
-import org.example.kakaocommunity.entity.Member;
+import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Post;
-import org.example.kakaocommunity.repository.MemberRepository;
-import org.example.kakaocommunity.repository.PostRepository;
+import org.example.kakaocommunity.service.CommentService;
 import org.example.kakaocommunity.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
 
     // 게시글 작성
@@ -65,5 +67,23 @@ public class PostController {
     ) {
         PostResponseDto.ListDto response = postService.getPostList(cursorId, limit);
         return ApiResponse.onSuccess(response);
+    }
+
+    //  댓글 추가
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<ApiResponse<CommentResponseDto.CreateDto>> createComment(
+            @PathVariable Long postId,
+            @RequestBody CommentRequestDto.CreateDto createDto,
+            @LoginUser Integer memberId
+    ) {
+        Comment comment = commentService.createComment(memberId, postId, createDto);
+
+        CommentResponseDto.CreateDto response = CommentResponseDto.CreateDto.builder()
+                .commentId(comment.getId())
+                .build();
+
+        return ResponseEntity.status(SuccessStatus._CREATED.getCode())
+                .body(ApiResponse.of(SuccessStatus._CREATED,response));
+
     }
 }

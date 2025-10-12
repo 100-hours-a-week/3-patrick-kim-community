@@ -12,14 +12,14 @@ public class CommentResponseDto {
     @Builder
     @AllArgsConstructor
     public static class CreateDto {
-        private Integer commentId;
+        private Long commentId;
     }
 
     @Getter
     @Builder
     @AllArgsConstructor
     public static class UpdateDto {
-        private Integer commentId;
+        private Long commentId;
         private String content;
     }
 
@@ -36,16 +36,16 @@ public class CommentResponseDto {
     @Builder
     @AllArgsConstructor
     public static class CommentSummary {
-        private UserInfo user;
-        private Integer commentId;
+        private MemberInfo user;
+        private Long commentId;
         private String content;
     }
 
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class UserInfo {
-        private Integer id;
+    public static class MemberInfo {
+        private Long id;
         private String nickname;
         private String profileImageUrl;
     }
