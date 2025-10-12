@@ -71,6 +71,16 @@ public class PostController {
         return ApiResponse.onSuccess(response);
     }
 
+    // 게시글 상세 조회
+    @GetMapping("/{postId}")
+    public ApiResponse<PostResponseDto.DetailDto> getPostDetail(
+            @PathVariable Long postId,
+            @LoginUser Integer memberId
+    ) {
+        PostResponseDto.DetailDto response = postService.getPostDetail(postId, memberId);
+        return ApiResponse.onSuccess(response);
+    }
+
     //  댓글 추가
     @PostMapping("/{postId}/comments")
     public ResponseEntity<ApiResponse<CommentResponseDto.CreateDto>> createComment(

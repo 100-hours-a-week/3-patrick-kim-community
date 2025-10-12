@@ -9,6 +9,7 @@ import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.exception.GeneralException;
 import org.example.kakaocommunity.repository.MemberRepository;
+import org.example.kakaocommunity.repository.PostLikeRepository;
 import org.example.kakaocommunity.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public Post getPost(PostRequestDto.CreateDto createDto, Integer memberId) {
         Member member = memberRepository.findById(memberId).get();
@@ -68,6 +70,33 @@ public class PostService {
                 .posts(postSummaries)
                 .nextCursorId(nextCursorId != null ? nextCursorId.intValue() : null)
                 .hasNext(hasNext)
+                .build();
+    }
+
+    public PostResponseDto.DetailDto getPostDetail(Long postId, Integer memberId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+
+        Member member = post.getMember();
+
+        // 사용자가 좋아요를 눌렀는지 확인
+        boolean liked = postLikeRepository.findByPostIdAndMemberId(postId, memberId).isPresent();
+
+        return PostResponseDto.DetailDto.builder()
+                .user(PostResponseDto.MemberInfo.builder()
+                        .id(member.getId())
+                        .nickname(member.getNickname())
+                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
+                        .build())
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createdAt(post.getCreatedAt())
+                .postImageUrl(post.getImage() != null ? post.getImage().getUrl() : null)
+                .liked(liked)
+                .likes(post.getLikeCount())
+                .comments(post.getCommentCount())
+                .views(post.getViewCount())
                 .build();
     }
 
