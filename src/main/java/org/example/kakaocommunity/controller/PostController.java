@@ -55,8 +55,15 @@ public class PostController {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build());
-
-
     }
 
+    @GetMapping
+    public ApiResponse<PostResponseDto.ListDto> getPostList(
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") Integer limit,
+            @LoginUser Integer memberId
+    ) {
+        PostResponseDto.ListDto response = postService.getPostList(cursorId, limit);
+        return ApiResponse.onSuccess(response);
+    }
 }

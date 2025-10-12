@@ -31,7 +31,7 @@ public class PostResponseDto {
     @Builder
     @AllArgsConstructor
     public static class DetailDto {
-        private UserInfo user;
+        private MemberInfo user;
         private Long postId;
         private String title;
         private String content;
@@ -56,8 +56,8 @@ public class PostResponseDto {
     @Builder
     @AllArgsConstructor
     public static class PostSummary {
-        private UserInfo user;
-        private Integer postId;
+        private MemberInfo member;
+        private Long postId;
         private String title;
         private LocalDateTime createdAt;
         private String postImageUrl;
@@ -69,7 +69,7 @@ public class PostResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class UserInfo {
+    public static class MemberInfo {
         private Integer id;
         private String nickname;
         private String profileImageUrl;

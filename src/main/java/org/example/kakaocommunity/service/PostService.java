@@ -4,12 +4,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
 import org.example.kakaocommunity.dto.request.PostRequestDto;
+import org.example.kakaocommunity.dto.response.PostResponseDto;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.exception.GeneralException;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +47,46 @@ public class PostService {
         post.changeTitle(request.getTitle());
 
         return post;
+    }
+
+    public PostResponseDto.ListDto getPostList(Long cursorId, Integer limit) {
+        List<Post> posts = postRepository.findPostsWithCursor(cursorId, limit + 1);
+
+        // 다음 페이지 존재 여부 확인
+        boolean hasNext = posts.size() > limit;
+        if (hasNext) {
+            posts = posts.subList(0, limit); // limit 개수만큼만 반환
+        }
+
+        Long nextCursorId = posts.isEmpty() ? null : posts.get(posts.size() - 1).getId();
+
+        List<PostResponseDto.PostSummary> postSummaries = posts.stream()
+                .map(this::convertToPostSummary)
+                .collect(Collectors.toList());
+
+        return PostResponseDto.ListDto.builder()
+                .posts(postSummaries)
+                .nextCursorId(nextCursorId != null ? nextCursorId.intValue() : null)
+                .hasNext(hasNext)
+                .build();
+    }
+
+    private PostResponseDto.PostSummary convertToPostSummary(Post post) {
+        Member member = post.getMember();
+
+        return PostResponseDto.PostSummary.builder()
+                .member(PostResponseDto.MemberInfo.builder()
+                        .id(member.getId())
+                        .nickname(member.getNickname())
+                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
+                        .build())
+                .postId(post.getId())
+                .title(post.getTitle())
+                .createdAt(post.getCreatedAt())
+                .postImageUrl(post.getImage() != null ? post.getImage().getUrl() : null)
+                .likes(post.getLikeCount())
+                .comments(post.getCommentCount())
+                .views(post.getViewCount())
+                .build();
     }
 }
