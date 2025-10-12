@@ -32,7 +32,7 @@ public class SecurityConfig {
 
                 // 요청 권한 설정
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/", "/auth", "/users").permitAll()
+                        .requestMatchers("/", "/auth", "/auth/refresh", "/users").permitAll()
                         .anyRequest().authenticated())
 
                 // 기본 폼 로그인 비활성화

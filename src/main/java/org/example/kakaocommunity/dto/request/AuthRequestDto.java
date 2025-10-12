@@ -35,4 +35,10 @@ public class AuthRequestDto {
         @NotBlank(message = "비밀번호가 비어 있습니다.")
         private String password;
     }
+
+    @Getter
+    public static class RefreshDto {
+        @NotBlank(message = "RefreshToken이 필요합니다.")
+        private String refreshToken;
+    }
 }

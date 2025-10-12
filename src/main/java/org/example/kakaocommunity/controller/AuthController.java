@@ -37,4 +37,15 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.onSuccess(null));
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<AuthResponseDto.RefreshDto>> refreshToken(
+            @Valid @RequestBody AuthRequestDto.RefreshDto refreshDto
+    ) {
+        String newAccessToken = authService.refreshAccessToken(refreshDto.getRefreshToken());
+        AuthResponseDto.RefreshDto response = AuthResponseDto.RefreshDto.builder()
+                .accessToken(newAccessToken)
+                .build();
+        return ResponseEntity.ok(ApiResponse.onSuccess(response));
+    }
 }

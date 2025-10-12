@@ -20,4 +20,11 @@ public class AuthResponseDto {
         private String accessToken;
         private String refreshToken;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class RefreshDto {
+        private String accessToken;
+    }
 }
