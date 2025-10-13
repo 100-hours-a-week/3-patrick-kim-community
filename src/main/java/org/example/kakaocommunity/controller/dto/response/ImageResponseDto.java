@@ -10,6 +10,7 @@ public class ImageResponseDto {
     @Builder
     @AllArgsConstructor
     public static class UploadDto {
-        private String s3Url;
+        private Long imageId;
+        private String imageUrl;
     }
 }
