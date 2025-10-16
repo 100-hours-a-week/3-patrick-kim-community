@@ -13,13 +13,13 @@ public class PostRequestDto {
         @NotBlank(message = "게시글 내용은 필수입니다.")
         private String content;
 
-        private String postImageUrl;
+        private Long postImageId;
     }
 
     @Getter
     public static class UpdateDto {
         private String title;
         private String content;
-        private String postImageUrl;
+        private Long postImageId;
     }
 }

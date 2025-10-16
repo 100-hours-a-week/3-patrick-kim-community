@@ -33,7 +33,7 @@ public class PostController {
             @LoginUser Integer memberId
     ) {
 
-        Post savedPost = postService.getPost(createDto, memberId);
+        Post savedPost = postService.createPost(createDto, memberId);
 
         PostResponseDto.CreateDto postResponse = PostResponseDto.CreateDto.builder()
                 .postId(savedPost.getId()).build();
@@ -54,8 +54,7 @@ public class PostController {
                 .builder()
                 .postId(post.getId())
                 .updatedAt(post.getUpdatedAt())
-//                .postImageUrl(post.getImage().getUrl()));
-                .postImageUrl(null)
+                .postImageUrl(post.getImage().getUrl())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .build());

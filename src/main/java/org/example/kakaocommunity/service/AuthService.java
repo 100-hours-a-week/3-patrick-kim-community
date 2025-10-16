@@ -6,7 +6,9 @@ import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
 import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.RefreshToken;
+import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.RefreshTokenRepository;
 import org.example.kakaocommunity.util.JwtUtil;
@@ -24,6 +26,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -45,12 +48,19 @@ public class AuthService {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(signupDto.getPassword());
 
+        // 이미지 조회 (있는 경우)
+        Image image = null;
+        if (signupDto.getProfileImageId() != null) {
+            image = imageRepository.findById(signupDto.getProfileImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+        }
+
         // 회원 생성 및 저장
         Member member = Member.builder()
                 .email(signupDto.getEmail())
                 .password(encodedPassword)
                 .nickname(signupDto.getNickname())
-                .image(null)  // TODO: 이미지는 나중에 구현
+                .image(image)
                 .build();
 
         Member savedMember = memberRepository.save(member);

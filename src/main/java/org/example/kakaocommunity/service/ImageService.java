@@ -109,7 +109,7 @@ public class ImageService {
                 s3Key,
                 inputStream,
                 metadata
-        ).withCannedAcl(CannedAccessControlList.PublicRead);
+        );
 
         amazonS3.putObject(putObjectRequest);
     }

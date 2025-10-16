@@ -30,9 +30,9 @@ public class AuthController {
 
     @DeleteMapping
     public ResponseEntity<ApiResponse<String>> logout(
-            @LoginUser Integer userId
+            @LoginUser Integer memberId
     ) {
-        authService.logout(userId);
+        authService.logout(memberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.onSuccess("로그아웃했습니다."));
     }

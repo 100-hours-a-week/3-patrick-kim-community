@@ -7,20 +7,22 @@ import lombok.Getter;
 public class MemberRequestDto {
 
     @Getter
-    public static class UpdatePasswordDto {
-        @NotBlank(message = "비밀번호가 비어 있습니다.")
+    public static class ChangePasswordDto {
+        @NotBlank(message = "현재 비밀번호가 비어 있습니다.")
+        private String currentPassword;
+
+        @NotBlank(message = "새 비밀번호가 비어 있습니다.")
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&]{8,}$",
                 message = "비밀번호 형식이 올바르지 않습니다.")
-        private String password;
+        private String newPassword;
     }
 
     @Getter
     public static class UpdateProfileDto {
-        @NotBlank(message = "닉네임이 비어있습니다.")
         @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$",
                 message = "닉네임 형식이 올바르지 않습니다.")
         private String nickname;
 
-        private String profileImageUrl;
+        private Long profileImageId;
     }
 }

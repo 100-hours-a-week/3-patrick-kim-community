@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
 import org.example.kakaocommunity.controller.dto.request.PostRequestDto;
 import org.example.kakaocommunity.controller.dto.response.PostResponseDto;
+import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostLikeRepository;
 import org.example.kakaocommunity.repository.PostRepository;
@@ -23,14 +25,22 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PostLikeRepository postLikeRepository;
+    private final ImageRepository imageRepository;
 
-    public Post getPost(PostRequestDto.CreateDto createDto, Integer memberId) {
+    public Post createPost(PostRequestDto.CreateDto createDto, Integer memberId) {
         Member member = memberRepository.findById(memberId).get();
+
+        // 이미지 조회 (있는 경우)
+        Image image = null;
+        if (createDto.getPostImageId() != null) {
+            image = imageRepository.findById(createDto.getPostImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+        }
 
         Post post = Post.builder()
                 .title(createDto.getTitle())
                 .content(createDto.getContent())
-                .image(null) //TODO : 이미지 나중에 처리
+                .image(image)
                 .member(member)
                 .build();
 
@@ -43,10 +53,22 @@ public class PostService {
 
         if(!member.getId().equals(post.getMember().getId())) throw new GeneralException(ErrorStatus._UNAUTHORIZED);
 
-        // 이미지가 있으면? 이미지 url에 맞게 변경하기
+        // 제목 변경
+        if (request.getTitle() != null) {
+            post.changeTitle(request.getTitle());
+        }
 
-        post.changeContent(request.getContent());
-        post.changeTitle(request.getTitle());
+        // 내용 변경
+        if (request.getContent() != null) {
+            post.changeContent(request.getContent());
+        }
+
+        // 이미지 변경 (imageId가 있는 경우)
+        if (request.getPostImageId() != null) {
+            Image image = imageRepository.findById(request.getPostImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+            post.changeImage(image);
+        }
 
         return post;
     }
