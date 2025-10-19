@@ -2,7 +2,7 @@ package org.example.kakaocommunity.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.kakaocommunity.common.BaseEntity;
+import org.example.kakaocommunity.global.common.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
@@ -48,6 +48,33 @@ public class Post extends BaseEntity {
     }
     public void changeContent(String content) {
         this.content = content;
+    }
+    public void changeImage(Image image) {
+        this.image = image;
+    }
+    
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+    
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+    
+    public void decreaseLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
+    
+    public void increaseCommentCount() {
+        this.commentCount++;
+    }
+    
+    public void decreaseCommentCount() {
+        if (this.commentCount > 0) {
+            this.commentCount--;
+        }
     }
 
 }

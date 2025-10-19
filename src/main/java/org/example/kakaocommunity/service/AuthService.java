@@ -1,15 +1,18 @@
 package org.example.kakaocommunity.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
-import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.dto.request.AuthRequestDto;
+import org.example.kakaocommunity.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.entity.Member;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.RefreshToken;
+import org.example.kakaocommunity.mapper.AuthMapper;
+import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.RefreshTokenRepository;
-import org.example.kakaocommunity.util.JwtUtil;
+import org.example.kakaocommunity.global.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -45,12 +49,19 @@ public class AuthService {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(signupDto.getPassword());
 
+        // 이미지 조회 (있는 경우)
+        Image image = null;
+        if (signupDto.getProfileImageId() != null) {
+            image = imageRepository.findById(signupDto.getProfileImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+        }
+
         // 회원 생성 및 저장
         Member member = Member.builder()
                 .email(signupDto.getEmail())
                 .password(encodedPassword)
                 .nickname(signupDto.getNickname())
-                .image(null)  // TODO: 이미지는 나중에 구현
+                .image(image)
                 .build();
 
         Member savedMember = memberRepository.save(member);
@@ -91,7 +102,7 @@ public class AuthService {
     }
 
     @Transactional
-    public String refreshAccessToken(String refreshToken) {
+    public AuthResponseDto.RefreshDto refreshAccessToken(String refreshToken) {
         // RefreshToken 검증
         if (!jwtUtil.validateToken(refreshToken)) {
             throw new GeneralException(ErrorStatus._UNAUTHORIZED);
@@ -113,7 +124,8 @@ public class AuthService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
 
         // 새로운 AccessToken 생성
-        return jwtUtil.generateAccessToken(member.getId(), member.getEmail());
+        String newAccessToken = jwtUtil.generateAccessToken(member.getId(), member.getEmail());
+        return AuthMapper.toRefreshDto(newAccessToken);
     }
 
     // RefreshToken 저장 또는 업데이트

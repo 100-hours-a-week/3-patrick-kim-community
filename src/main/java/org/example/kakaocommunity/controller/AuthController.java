@@ -2,10 +2,10 @@ package org.example.kakaocommunity.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
-import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
-import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
+import org.example.kakaocommunity.dto.request.AuthRequestDto;
+import org.example.kakaocommunity.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +30,9 @@ public class AuthController {
 
     @DeleteMapping
     public ResponseEntity<ApiResponse<String>> logout(
-            @LoginUser Integer userId
+            @LoginUser Integer memberId
     ) {
-        authService.logout(userId);
+        authService.logout(memberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(ApiResponse.onSuccess("로그아웃했습니다."));
     }
@@ -41,10 +41,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponseDto.RefreshDto>> refreshToken(
             @Valid @RequestBody AuthRequestDto.RefreshDto refreshDto
     ) {
-        String newAccessToken = authService.refreshAccessToken(refreshDto.getRefreshToken());
-        AuthResponseDto.RefreshDto response = AuthResponseDto.RefreshDto.builder()
-                .accessToken(newAccessToken)
-                .build();
+        AuthResponseDto.RefreshDto response = authService.refreshAccessToken(refreshDto.getRefreshToken());
         return ResponseEntity.ok(ApiResponse.onSuccess(response));
     }
 }

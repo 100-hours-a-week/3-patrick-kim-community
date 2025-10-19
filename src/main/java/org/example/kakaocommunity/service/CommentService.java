@@ -2,13 +2,14 @@ package org.example.kakaocommunity.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.controller.dto.request.CommentRequestDto;
-import org.example.kakaocommunity.controller.dto.response.CommentResponseDto;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.dto.request.CommentRequestDto;
+import org.example.kakaocommunity.dto.response.CommentResponseDto;
 import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.mapper.CommentMapper;
 import org.example.kakaocommunity.repository.CommentRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostRepository;
@@ -25,22 +26,32 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    public Comment createComment(Integer memberId,Long postId, CommentRequestDto.CreateDto createDto) {
+    public CommentResponseDto.CreateDto createComment(Integer memberId, Long postId, CommentRequestDto.CreateDto createDto) {
         Member member = memberRepository.findById(memberId).get();
-        Post post  = postRepository.findById(postId).get();
+        Post post = postRepository.findById(postId).get();
+
         Comment comment = Comment.builder()
                 .post(post)
                 .content(createDto.getContent())
                 .member(member)
                 .build();
-        return commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+
+        // 댓글 수 증가
+        post.increaseCommentCount();
+
+        return CommentMapper.toCreateDto(savedComment);
     }
 
     public void delete(Integer memberId, Long commentId) {
-        Comment comment =  commentRepository.findById(commentId).get();
+        Comment comment = commentRepository.findById(commentId).get();
 
         if(!memberId.equals(comment.getMember().getId()))
             throw new GeneralException(ErrorStatus._FORBIDDEN);
+
+        // 댓글 수 감소
+        Post post = comment.getPost();
+        post.decreaseCommentCount();
 
         commentRepository.delete(comment);
     }
@@ -60,27 +71,13 @@ public class CommentService {
 
         // DTO 변환
         List<CommentResponseDto.CommentSummary> commentSummaries = comments.stream()
-                .map(this::convertToCommentSummary)
+                .map(CommentMapper::toCommentSummary)
                 .collect(Collectors.toList());
 
         return CommentResponseDto.ListDto.builder()
                 .comments(commentSummaries)
                 .nextCursorId(nextCursorId != null ? nextCursorId.intValue() : null)
                 .hasNext(hasNext)
-                .build();
-    }
-
-    private CommentResponseDto.CommentSummary convertToCommentSummary(Comment comment) {
-        Member member = comment.getMember();
-
-        return CommentResponseDto.CommentSummary.builder()
-                .user(CommentResponseDto.MemberInfo.builder()
-                        .id(member.getId().longValue())
-                        .nickname(member.getNickname())
-                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
-                        .build())
-                .commentId(comment.getId())
-                .content(comment.getContent())
                 .build();
     }
 }

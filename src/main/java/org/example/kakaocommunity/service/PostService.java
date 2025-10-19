@@ -2,12 +2,15 @@ package org.example.kakaocommunity.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.controller.dto.request.PostRequestDto;
-import org.example.kakaocommunity.controller.dto.response.PostResponseDto;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.dto.request.PostRequestDto;
+import org.example.kakaocommunity.dto.response.PostResponseDto;
+import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.mapper.PostMapper;
+import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.PostLikeRepository;
 import org.example.kakaocommunity.repository.PostRepository;
@@ -23,32 +26,53 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PostLikeRepository postLikeRepository;
+    private final ImageRepository imageRepository;
 
-    public Post getPost(PostRequestDto.CreateDto createDto, Integer memberId) {
+    public PostResponseDto.CreateDto createPost(PostRequestDto.CreateDto createDto, Integer memberId) {
         Member member = memberRepository.findById(memberId).get();
+
+        // 이미지 조회 (있는 경우)
+        Image image = null;
+        if (createDto.getPostImageId() != null) {
+            image = imageRepository.findById(createDto.getPostImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+        }
 
         Post post = Post.builder()
                 .title(createDto.getTitle())
                 .content(createDto.getContent())
-                .image(null) //TODO : 이미지 나중에 처리
+                .image(image)
                 .member(member)
                 .build();
 
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return PostMapper.toCreateDto(savedPost);
     }
 
-    public Post updatePost(Long postId, PostRequestDto.UpdateDto request, Integer memberId) {
+    public PostResponseDto.UpdateDto updatePost(Long postId, PostRequestDto.UpdateDto request, Integer memberId) {
         Member member = memberRepository.findById(memberId).get();
         Post post = postRepository.findById(postId).get();
 
         if(!member.getId().equals(post.getMember().getId())) throw new GeneralException(ErrorStatus._UNAUTHORIZED);
 
-        // 이미지가 있으면? 이미지 url에 맞게 변경하기
+        // 제목 변경
+        if (request.getTitle() != null) {
+            post.changeTitle(request.getTitle());
+        }
 
-        post.changeContent(request.getContent());
-        post.changeTitle(request.getTitle());
+        // 내용 변경
+        if (request.getContent() != null) {
+            post.changeContent(request.getContent());
+        }
 
-        return post;
+        // 이미지 변경 (imageId가 있는 경우)
+        if (request.getPostImageId() != null) {
+            Image image = imageRepository.findById(request.getPostImageId())
+                    .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
+            post.changeImage(image);
+        }
+
+        return PostMapper.toUpdateDto(post);
     }
 
     public PostResponseDto.ListDto getPostList(Long cursorId, Integer limit) {
@@ -63,7 +87,7 @@ public class PostService {
         Long nextCursorId = posts.isEmpty() ? null : posts.get(posts.size() - 1).getId();
 
         List<PostResponseDto.PostSummary> postSummaries = posts.stream()
-                .map(this::convertToPostSummary)
+                .map(PostMapper::toPostSummary)
                 .collect(Collectors.toList());
 
         return PostResponseDto.ListDto.builder()
@@ -77,45 +101,12 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
 
-        Member member = post.getMember();
+        // 조회수 증가
+        post.increaseViewCount();
 
         // 사용자가 좋아요를 눌렀는지 확인
         boolean liked = postLikeRepository.findByPostIdAndMemberId(postId, memberId).isPresent();
 
-        return PostResponseDto.DetailDto.builder()
-                .user(PostResponseDto.MemberInfo.builder()
-                        .id(member.getId())
-                        .nickname(member.getNickname())
-                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
-                        .build())
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .createdAt(post.getCreatedAt())
-                .postImageUrl(post.getImage() != null ? post.getImage().getUrl() : null)
-                .liked(liked)
-                .likes(post.getLikeCount())
-                .comments(post.getCommentCount())
-                .views(post.getViewCount())
-                .build();
-    }
-
-    private PostResponseDto.PostSummary convertToPostSummary(Post post) {
-        Member member = post.getMember();
-
-        return PostResponseDto.PostSummary.builder()
-                .member(PostResponseDto.MemberInfo.builder()
-                        .id(member.getId())
-                        .nickname(member.getNickname())
-                        .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
-                        .build())
-                .postId(post.getId())
-                .title(post.getTitle())
-                .createdAt(post.getCreatedAt())
-                .postImageUrl(post.getImage() != null ? post.getImage().getUrl() : null)
-                .likes(post.getLikeCount())
-                .comments(post.getCommentCount())
-                .views(post.getViewCount())
-                .build();
+        return PostMapper.toDetailDto(post, liked);
     }
 }

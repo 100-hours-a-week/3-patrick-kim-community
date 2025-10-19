@@ -1,15 +1,13 @@
 package org.example.kakaocommunity.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
-import org.example.kakaocommunity.apiPayload.status.SuccessStatus;
-import org.example.kakaocommunity.controller.dto.request.CommentRequestDto;
-import org.example.kakaocommunity.controller.dto.request.PostRequestDto;
-import org.example.kakaocommunity.controller.dto.response.CommentResponseDto;
-import org.example.kakaocommunity.controller.dto.response.PostResponseDto;
-import org.example.kakaocommunity.entity.Comment;
-import org.example.kakaocommunity.entity.Post;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
+import org.example.kakaocommunity.global.apiPayload.status.SuccessStatus;
+import org.example.kakaocommunity.dto.request.CommentRequestDto;
+import org.example.kakaocommunity.dto.request.PostRequestDto;
+import org.example.kakaocommunity.dto.response.CommentResponseDto;
+import org.example.kakaocommunity.dto.response.PostResponseDto;
 import org.example.kakaocommunity.service.CommentService;
 import org.example.kakaocommunity.service.PostLikeService;
 import org.example.kakaocommunity.service.PostService;
@@ -32,15 +30,10 @@ public class PostController {
             @RequestBody PostRequestDto.CreateDto createDto,
             @LoginUser Integer memberId
     ) {
-
-        Post savedPost = postService.getPost(createDto, memberId);
-
-        PostResponseDto.CreateDto postResponse = PostResponseDto.CreateDto.builder()
-                .postId(savedPost.getId()).build();
+        PostResponseDto.CreateDto response = postService.createPost(createDto, memberId);
 
         return ResponseEntity.status(SuccessStatus._CREATED.getCode())
-                .body(ApiResponse.of(SuccessStatus._CREATED, postResponse));
-
+                .body(ApiResponse.of(SuccessStatus._CREATED, response));
     }
 
     @PatchMapping("/{postId}")
@@ -49,16 +42,8 @@ public class PostController {
             @RequestBody PostRequestDto.UpdateDto request,
             @LoginUser Integer memberId
     ) {
-        Post post = postService.updatePost(postId, request, memberId);
-        return ApiResponse.onSuccess(PostResponseDto.UpdateDto
-                .builder()
-                .postId(post.getId())
-                .updatedAt(post.getUpdatedAt())
-//                .postImageUrl(post.getImage().getUrl()));
-                .postImageUrl(null)
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build());
+        PostResponseDto.UpdateDto response = postService.updatePost(postId, request, memberId);
+        return ApiResponse.onSuccess(response);
     }
 
     @GetMapping
@@ -88,15 +73,10 @@ public class PostController {
             @RequestBody CommentRequestDto.CreateDto createDto,
             @LoginUser Integer memberId
     ) {
-        Comment comment = commentService.createComment(memberId, postId, createDto);
-
-        CommentResponseDto.CreateDto response = CommentResponseDto.CreateDto.builder()
-                .commentId(comment.getId())
-                .build();
+        CommentResponseDto.CreateDto response = commentService.createComment(memberId, postId, createDto);
 
         return ResponseEntity.status(SuccessStatus._CREATED.getCode())
-                .body(ApiResponse.of(SuccessStatus._CREATED,response));
-
+                .body(ApiResponse.of(SuccessStatus._CREATED, response));
     }
 
     // 댓글 목록 조회
