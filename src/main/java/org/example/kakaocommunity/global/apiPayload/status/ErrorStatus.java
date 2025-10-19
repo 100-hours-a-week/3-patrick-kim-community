@@ -1,9 +1,9 @@
-package org.example.kakaocommunity.apiPayload.status;
+package org.example.kakaocommunity.global.apiPayload.status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.kakaocommunity.apiPayload.code.BaseErrorCode;
-import org.example.kakaocommunity.apiPayload.code.ErrorReasonDto;
+import org.example.kakaocommunity.global.apiPayload.code.BaseErrorCode;
+import org.example.kakaocommunity.global.apiPayload.code.ErrorReasonDto;
 import org.springframework.http.HttpStatus;
 
 @Getter

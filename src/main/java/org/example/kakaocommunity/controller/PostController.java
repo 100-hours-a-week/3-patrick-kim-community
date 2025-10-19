@@ -1,9 +1,9 @@
 package org.example.kakaocommunity.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
-import org.example.kakaocommunity.apiPayload.status.SuccessStatus;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
+import org.example.kakaocommunity.global.apiPayload.status.SuccessStatus;
 import org.example.kakaocommunity.dto.request.CommentRequestDto;
 import org.example.kakaocommunity.dto.request.PostRequestDto;
 import org.example.kakaocommunity.dto.response.CommentResponseDto;

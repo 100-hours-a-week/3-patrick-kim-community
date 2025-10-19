@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.config;
+package org.example.kakaocommunity.global.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;

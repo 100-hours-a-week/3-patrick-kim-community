@@ -1,7 +1,7 @@
-package org.example.kakaocommunity.config;
+package org.example.kakaocommunity.global.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.filter.JwtAuthenticationFilter;
+import org.example.kakaocommunity.global.security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,12 +1,12 @@
-package org.example.kakaocommunity.exception;
+package org.example.kakaocommunity.global.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
-import org.example.kakaocommunity.apiPayload.code.ErrorReasonDto;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
+import org.example.kakaocommunity.global.apiPayload.code.ErrorReasonDto;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

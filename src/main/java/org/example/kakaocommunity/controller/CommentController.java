@@ -1,8 +1,8 @@
 package org.example.kakaocommunity.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
 import org.example.kakaocommunity.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 

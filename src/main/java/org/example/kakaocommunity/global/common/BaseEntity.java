@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.common;
+package org.example.kakaocommunity.global.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

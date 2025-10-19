@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.config;
+package org.example.kakaocommunity.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

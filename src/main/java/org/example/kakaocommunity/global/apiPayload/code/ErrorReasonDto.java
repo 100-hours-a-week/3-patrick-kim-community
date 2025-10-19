@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.apiPayload.code;
+package org.example.kakaocommunity.global.apiPayload.code;
 
 import lombok.Builder;
 import lombok.Getter;

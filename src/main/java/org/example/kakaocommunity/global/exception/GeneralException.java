@@ -1,10 +1,10 @@
-package org.example.kakaocommunity.exception;
+package org.example.kakaocommunity.global.exception;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.kakaocommunity.apiPayload.code.BaseErrorCode;
-import org.example.kakaocommunity.apiPayload.code.ErrorReasonDto;
+import org.example.kakaocommunity.global.apiPayload.code.BaseErrorCode;
+import org.example.kakaocommunity.global.apiPayload.code.ErrorReasonDto;
 
 @Getter
 @AllArgsConstructor

@@ -2,12 +2,12 @@ package org.example.kakaocommunity.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
 import org.example.kakaocommunity.dto.request.MemberRequestDto;
 import org.example.kakaocommunity.dto.response.MemberResponseDto;
 import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.Member;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.exception.GeneralException;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.RefreshTokenRepository;

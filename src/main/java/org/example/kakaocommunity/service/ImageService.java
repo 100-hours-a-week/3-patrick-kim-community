@@ -1,19 +1,18 @@
 package org.example.kakaocommunity.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.config.S3Config;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.global.config.S3Config;
 import org.example.kakaocommunity.dto.response.ImageResponseDto;
 import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.enums.ImageStatus;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.exception.GeneralException;
 import org.example.kakaocommunity.mapper.ImageMapper;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.springframework.stereotype.Service;

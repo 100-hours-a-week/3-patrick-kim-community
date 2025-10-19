@@ -1,7 +1,7 @@
-package org.example.kakaocommunity.config;
+package org.example.kakaocommunity.global.config;
 
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.resolver.LoginUserArgumentResolver;
+import org.example.kakaocommunity.global.security.resolver.LoginUserArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

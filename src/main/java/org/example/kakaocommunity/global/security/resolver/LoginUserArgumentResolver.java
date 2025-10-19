@@ -1,8 +1,8 @@
-package org.example.kakaocommunity.resolver;
+package org.example.kakaocommunity.global.security.resolver;
 
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.status.ErrorStatus;
+import org.example.kakaocommunity.global.exception.GeneralException;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

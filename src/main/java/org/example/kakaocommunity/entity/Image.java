@@ -2,7 +2,7 @@ package org.example.kakaocommunity.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.kakaocommunity.common.BaseEntity;
+import org.example.kakaocommunity.global.common.BaseEntity;
 import org.example.kakaocommunity.entity.enums.ImageStatus;
 
 @Entity

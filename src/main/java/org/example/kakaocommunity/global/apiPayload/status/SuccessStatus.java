@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.apiPayload.status;
+package org.example.kakaocommunity.global.apiPayload.status;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

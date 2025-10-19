@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.util;
+package org.example.kakaocommunity.global.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.annotation;
+package org.example.kakaocommunity.global.security.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -2,8 +2,8 @@ package org.example.kakaocommunity.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.kakaocommunity.annotation.LoginUser;
-import org.example.kakaocommunity.apiPayload.ApiResponse;
+import org.example.kakaocommunity.global.security.annotation.LoginUser;
+import org.example.kakaocommunity.global.apiPayload.ApiResponse;
 import org.example.kakaocommunity.dto.request.AuthRequestDto;
 import org.example.kakaocommunity.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.service.AuthService;
