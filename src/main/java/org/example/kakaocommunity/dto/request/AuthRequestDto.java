@@ -1,4 +1,4 @@
-package org.example.kakaocommunity.controller.dto.request;
+package org.example.kakaocommunity.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -2,12 +2,13 @@ package org.example.kakaocommunity.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
-import org.example.kakaocommunity.controller.dto.request.AuthRequestDto;
-import org.example.kakaocommunity.controller.dto.response.AuthResponseDto;
+import org.example.kakaocommunity.dto.request.AuthRequestDto;
+import org.example.kakaocommunity.dto.response.AuthResponseDto;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.exception.GeneralException;
 import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.RefreshToken;
+import org.example.kakaocommunity.mapper.AuthMapper;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.RefreshTokenRepository;
@@ -101,7 +102,7 @@ public class AuthService {
     }
 
     @Transactional
-    public String refreshAccessToken(String refreshToken) {
+    public AuthResponseDto.RefreshDto refreshAccessToken(String refreshToken) {
         // RefreshToken 검증
         if (!jwtUtil.validateToken(refreshToken)) {
             throw new GeneralException(ErrorStatus._UNAUTHORIZED);
@@ -123,7 +124,8 @@ public class AuthService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
 
         // 새로운 AccessToken 생성
-        return jwtUtil.generateAccessToken(member.getId(), member.getEmail());
+        String newAccessToken = jwtUtil.generateAccessToken(member.getId(), member.getEmail());
+        return AuthMapper.toRefreshDto(newAccessToken);
     }
 
     // RefreshToken 저장 또는 업데이트

@@ -10,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kakaocommunity.apiPayload.status.ErrorStatus;
 import org.example.kakaocommunity.config.S3Config;
+import org.example.kakaocommunity.dto.response.ImageResponseDto;
 import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.enums.ImageStatus;
 import org.example.kakaocommunity.exception.GeneralException;
+import org.example.kakaocommunity.mapper.ImageMapper;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +32,7 @@ public class ImageService {
     private final S3Config s3Config;
     private final ImageRepository imageRepository;
 
-    public Image uploadImage(MultipartFile file) {
+    public ImageResponseDto.UploadDto uploadImage(MultipartFile file) {
         validateImageFile(file);
 
         String fileName = createFileName(file.getOriginalFilename());
@@ -51,7 +53,8 @@ public class ImageService {
                 .status(ImageStatus.UNUSED)
                 .build();
 
-        return imageRepository.save(image);
+        Image savedImage = imageRepository.save(image);
+        return ImageMapper.toUploadDto(savedImage);
     }
 
     public void deleteImage(Long imageId) {
