@@ -101,6 +101,9 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus._NOTFOUND));
 
+        // 조회수 증가
+        post.increaseViewCount();
+
         // 사용자가 좋아요를 눌렀는지 확인
         boolean liked = postLikeRepository.findByPostIdAndMemberId(postId, memberId).isPresent();
 

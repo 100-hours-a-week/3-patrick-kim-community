@@ -29,20 +29,29 @@ public class CommentService {
     public CommentResponseDto.CreateDto createComment(Integer memberId, Long postId, CommentRequestDto.CreateDto createDto) {
         Member member = memberRepository.findById(memberId).get();
         Post post = postRepository.findById(postId).get();
+
         Comment comment = Comment.builder()
                 .post(post)
                 .content(createDto.getContent())
                 .member(member)
                 .build();
         Comment savedComment = commentRepository.save(comment);
+
+        // 댓글 수 증가
+        post.increaseCommentCount();
+
         return CommentMapper.toCreateDto(savedComment);
     }
 
     public void delete(Integer memberId, Long commentId) {
-        Comment comment =  commentRepository.findById(commentId).get();
+        Comment comment = commentRepository.findById(commentId).get();
 
         if(!memberId.equals(comment.getMember().getId()))
             throw new GeneralException(ErrorStatus._FORBIDDEN);
+
+        // 댓글 수 감소
+        Post post = comment.getPost();
+        post.decreaseCommentCount();
 
         commentRepository.delete(comment);
     }
