@@ -9,6 +9,7 @@ import org.example.kakaocommunity.entity.Comment;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.global.validator.CommentValidator;
 import org.example.kakaocommunity.mapper.CommentMapper;
 import org.example.kakaocommunity.repository.CommentRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
@@ -79,5 +80,11 @@ public class CommentService {
                 .nextCursorId(nextCursorId != null ? nextCursorId.intValue() : null)
                 .hasNext(hasNext)
                 .build();
+    }
+
+    public void updateComment(Long commentId, Integer memberId , String content) {
+        Comment comment = commentRepository.findById(commentId).get();
+        CommentValidator.validateCommentOwnership(comment,memberId);
+        comment.changeContent(content);
     }
 }
