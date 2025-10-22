@@ -36,6 +36,7 @@ public class PostController {
                 .body(ApiResponse.of(SuccessStatus._CREATED, response));
     }
 
+    // 게시글 수정
     @PatchMapping("/{postId}")
     public ApiResponse<PostResponseDto.UpdateDto> updatePost(
             @PathVariable Long postId,
@@ -44,6 +45,18 @@ public class PostController {
     ) {
         PostResponseDto.UpdateDto response = postService.updatePost(postId, request, memberId);
         return ApiResponse.onSuccess(response);
+    }
+
+    //게시글 삭제 -> noContent
+    @DeleteMapping("/{postId}")
+    public ApiResponse<String> deletePost(
+            @PathVariable Long postId,
+            @LoginUser Integer memberId
+    ) {
+        postService.deletePost(postId,memberId);
+
+        return ApiResponse.onSuccess("게시글을 성공적으로 삭제했습니다.");
+
     }
 
     @GetMapping

@@ -39,9 +39,11 @@ public class Post extends BaseEntity {
     @ColumnDefault("0")
     private int commentCount;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<PostLike> postLikes = new ArrayList<>();
 
     public void changeTitle(String title) {
         this.title = title;
