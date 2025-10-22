@@ -20,8 +20,7 @@ public class ImageController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ImageResponseDto.UploadDto>> uploadImage(
-            @RequestPart("image") MultipartFile file,
-            @LoginUser Integer memberId
+            @RequestPart("image") MultipartFile file
     ) {
         ImageResponseDto.UploadDto response = imageService.uploadImage(file);
 
