@@ -33,8 +33,7 @@ public class AuthController {
             @LoginUser Integer memberId
     ) {
         authService.logout(memberId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(ApiResponse.onSuccess("로그아웃했습니다."));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @PostMapping("/refresh")
