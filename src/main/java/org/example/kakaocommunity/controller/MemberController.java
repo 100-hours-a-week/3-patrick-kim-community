@@ -22,6 +22,14 @@ public class MemberController {
     private final AuthService authService;
     private final MemberService memberService;
 
+    //회원정보 조회
+    @GetMapping("me")
+    public ApiResponse<MemberResponseDto.ProfileDto> getMemberInfo(
+            @LoginUser Integer memberId
+    ) {
+        return ApiResponse.onSuccess(memberService.getMemberInfo(memberId));
+    }
+
     // 회원가입
     @PostMapping
     public ResponseEntity<ApiResponse<AuthResponseDto.SignupDto>> signup(

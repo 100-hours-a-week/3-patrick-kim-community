@@ -8,11 +8,14 @@ import org.example.kakaocommunity.dto.response.MemberResponseDto;
 import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.mapper.MemberMapper;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
 import org.example.kakaocommunity.repository.RefreshTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.example.kakaocommunity.mapper.MemberMapper.toUpdateDto;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,11 @@ public class MemberService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final ImageRepository imageRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public MemberResponseDto.ProfileDto getMemberInfo(Integer memberId ) {
+        Member member = memberRepository.findById(memberId).get();
+        return MemberMapper.toProfileDto(member);
+    }
 
 
     public void changePassword(Integer memberId, MemberRequestDto.ChangePasswordDto request) {
@@ -57,13 +65,10 @@ public class MemberService {
             member.changeImage(image);
         }
 
-        return MemberResponseDto.UpdateDto.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
-                .profileImageUrl(member.getImage() != null ? member.getImage().getUrl() : null)
-                .updatedAt(member.getUpdatedAt())
-                .build();
+        return MemberMapper.toUpdateDto(member);
     }
+
+
 
     public void deleteAccount(Integer memberId) {
         Member member = memberRepository.findById(memberId)
