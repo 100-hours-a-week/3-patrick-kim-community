@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>개인정보처리방침</title>
+</head>
+<body>
+<div th:replace="~{layout/layout :: layout(~{::section})}">
+    <section>
+        <h1>개인정보처리방침</h1>
+        <p class="meta"
+           th:text="|최종 업데이트: ${#temporals.format(lastUpdated, 'yyyy.MM.dd')}|">최종 업데이트: 2025.10.23</p>
+        <p>
+            <strong th:text="${companyName}">회사명</strong>(이하 “회사”)은 「개인정보 보호법」 등 관계 법령을 준수하며,
+            <strong th:text="${serviceName}">서비스명</strong> 커뮤니티 이용과 관련하여 이용자의 개인정보를 안전하게 처리합니다.
+        </p>
+
+        <nav class="toc" aria-label="목차">
+            <ol>
+                <li><a href="#p1">1. 수집하는 개인정보의 항목</a></li>
+                <li><a href="#p2">2. 개인정보의 수집 방법</a></li>
+                <li><a href="#p3">3. 개인정보의 이용 목적</a></li>
+                <li><a href="#p4">4. 보유 및 이용기간, 파기절차</a></li>
+                <li><a href="#p5">5. 제3자 제공</a></li>
+                <li><a href="#p6">6. 처리위탁</a></li>
+                <li><a href="#p7">7. 국외 이전(해당 시)</a></li>
+                <li><a href="#p8">8. 이용자의 권리 및 행사방법</a></li>
+                <li><a href="#p9">9. 쿠키의 사용</a></li>
+                <li><a href="#p10">10. 안전성 확보조치</a></li>
+                <li><a href="#p11">11. 개인정보 보호책임자</a></li>
+                <li><a href="#p12">12. 본 방침의 변경</a></li>
+            </ol>
+        </nav>
+
+        <div id="p1" class="section">
+            <h2>1. 수집하는 개인정보의 항목</h2>
+            <ul>
+                <li>필수: 이메일, 닉네임, 비밀번호(해시), 서비스 이용기록, 접속로그, 쿠키, IP</li>
+                <li>선택: 프로필 이미지, 자기소개, SNS 계정, 관심사</li>
+                <li>고객센터 처리 시: 문의 내용, 첨부파일, 연락처</li>
+            </ul>
+        </div>
+
+        <div id="p2" class="section">
+            <h2>2. 개인정보의 수집 방법</h2>
+            <ul>
+                <li>회원가입·프로필 입력 등 서비스 내 입력</li>
+                <li>자동 수집(쿠키, 접속기기 정보, 브라우저 정보 등)</li>
+                <li>고객센터 문의, 이벤트·프로모션 참여</li>
+            </ul>
+        </div>
+
+        <div id="p3" class="section">
+            <h2>3. 개인정보의 이용 목적</h2>
+            <ul>
+                <li>회원 식별, 계정 관리, 부정이용 방지</li>
+                <li>커뮤니티 운영(게시물·댓글·알림), 맞춤형 기능 제공</li>
+                <li>서비스 개선, 통계·분석, 오류 및 보안 모니터링</li>
+                <li>공지·고지사항 전달 및 고객지원</li>
+                <li>법령 준수 및 분쟁 대응</li>
+            </ul>
+        </div>
+
+        <div id="p4" class="section">
+            <h2>4. 보유 및 이용기간, 파기절차</h2>
+            <ul>
+                <li>원칙적으로 수집·이용 목적 달성 시 지체 없이 파기합니다.</li>
+                <li>관계 법령에 따른 보관(예: 전자상거래법, 통신비밀보호법 등)은 해당 기간 동안 보유합니다.</li>
+                <li>파기방법: 전자적 파일은 복구불가능한 기술적 방법으로, 출력물은 분쇄·소각</li>
+            </ul>
+        </div>
+
+        <div id="p5" class="section">
+            <h2>5. 제3자 제공</h2>
+            <p>회사는 법령에 근거하거나 이용자의 별도 동의가 있는 경우에 한해 최소한의 범위에서 제공합니다.</p>
+            <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse">
+                <thead><tr><th>제공받는 자</th><th>제공 목적</th><th>항목</th><th>보유·이용기간</th></tr></thead>
+                <tbody>
+                <tr><td>(해당 시 기재)</td><td>-</td><td>-</td><td>-</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="p6" class="section">
+            <h2>6. 처리위탁</h2>
+            <p>원활한 서비스 제공을 위해 업무 일부를 위탁할 수 있으며, 위탁 시 계약 등을 통해 개인정보 보호조치를 이행합니다.</p>
+            <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse">
+                <thead><tr><th>수탁자</th><th>위탁 업무</th><th>보유·이용기간</th></tr></thead>
+                <tbody>
+                <tr><td>(예: 클라우드 제공사)</td><td>인프라 운영</td><td>위탁계약 종료 시까지</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="p7" class="section">
+            <h2>7. 국외 이전(해당 시)</h2>
+            <p>국외 이전이 있는 경우 목적·항목·보유기간·관리책임자 연락처 등 법정 고지사항을 여기에 기재합니다.</p>
+        </div>
+
+        <div id="p8" class="section">
+            <h2>8. 이용자의 권리 및 행사방법</h2>
+            <ul>
+                <li>열람·정정·삭제·처리정지 요구권이 있으며, 고객센터 또는 이메일로 요청할 수 있습니다.</li>
+                <li>대리인 행사는 위임장 등 관련 서류로 확인 후 진행합니다.</li>
+            </ul>
+        </div>
+
+        <div id="p9" class="section">
+            <h2>9. 쿠키의 사용</h2>
+            <ul>
+                <li>개인화·로그인 유지·이용 통계 분석을 위해 쿠키를 사용합니다.</li>
+                <li>브라우저 설정에서 쿠키 저장을 거부할 수 있으나 일부 기능에 제약이 있을 수 있습니다.</li>
+            </ul>
+        </div>
+
+        <div id="p10" class="section">
+            <h2>10. 안전성 확보조치</h2>
+            <ul>
+                <li>관리적 조치: 내부관리계획 수립·교육, 접근권한 최소화</li>
+                <li>기술적 조치: 비밀번호 해시 처리, 전송구간 암호화(HTTPS), 접근통제, 로그 모니터링</li>
+                <li>물리적 조치: 전산실·자료보관실 접근통제</li>
+            </ul>
+        </div>
+
+        <div id="p11" class="section">
+            <h2>11. 개인정보 보호책임자</h2>
+            <address>
+                보호책임자: <span th:text="${privacyOfficerName} ?: '성명'">성명</span><br/>
+                이메일: <a th:href="|mailto:${contactEmail}|" th:text="${contactEmail}">contact@example.com</a><br/>
+                주소: <span th:text="${companyAddress} ?: '주소'">주소</span><br/>
+            </address>
+        </div>
+
+        <div id="p12" class="section">
+            <h2>12. 본 방침의 변경</h2>
+            <p th:text="|본 방침은 ${#temporals.format(lastUpdated, 'yyyy년 M월 d일')}부터 적용됩니다.|">
+                본 방침은 2025년 10월 23일부터 적용됩니다.
+            </p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

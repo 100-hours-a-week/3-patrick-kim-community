@@ -59,6 +59,7 @@ public class PostController {
 
     }
 
+    //게시글 목록 조회
     @GetMapping
     public ApiResponse<PostResponseDto.ListDto> getPostList(
             @RequestParam(required = false) Long cursorId,
