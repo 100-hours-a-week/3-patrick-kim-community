@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +34,7 @@ public class SecurityConfig {
 
                 // 요청 권한 설정
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/users", "/auth/**","images").permitAll()
+                        .requestMatchers("/users", "/auth/**","images","/terms","/privacy").permitAll()
                         .anyRequest().authenticated())
 
                 // 기본 폼 로그인 비활성화
@@ -42,6 +43,9 @@ public class SecurityConfig {
                 // Basic HTTP 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable)
 
+                //같은 도메인에서 정적 컨텐츠 서빙 허용
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 // JWT 인증 필터 추가
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults());

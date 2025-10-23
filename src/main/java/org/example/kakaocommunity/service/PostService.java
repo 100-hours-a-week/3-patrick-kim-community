@@ -9,6 +9,7 @@ import org.example.kakaocommunity.entity.Image;
 import org.example.kakaocommunity.entity.Member;
 import org.example.kakaocommunity.entity.Post;
 import org.example.kakaocommunity.global.exception.GeneralException;
+import org.example.kakaocommunity.global.validator.PostValidator;
 import org.example.kakaocommunity.mapper.PostMapper;
 import org.example.kakaocommunity.repository.ImageRepository;
 import org.example.kakaocommunity.repository.MemberRepository;
@@ -50,11 +51,8 @@ public class PostService {
     }
 
     public PostResponseDto.UpdateDto updatePost(Long postId, PostRequestDto.UpdateDto request, Integer memberId) {
-        Member member = memberRepository.findById(memberId).get();
         Post post = postRepository.findById(postId).get();
-
-        if(!member.getId().equals(post.getMember().getId())) throw new GeneralException(ErrorStatus._UNAUTHORIZED);
-
+        PostValidator.validatePostOwnerShip(post,memberId);
         // 제목 변경
         if (request.getTitle() != null) {
             post.changeTitle(request.getTitle());
@@ -108,5 +106,13 @@ public class PostService {
         boolean liked = postLikeRepository.findByPostIdAndMemberId(postId, memberId).isPresent();
 
         return PostMapper.toDetailDto(post, liked);
+    }
+
+    // 게시글 삭제
+    public void deletePost(Long postId, Integer memberId) {
+        Post post = postRepository.findById(postId).get();
+        PostValidator.validatePostOwnerShip(post,memberId);
+        postRepository.delete(post);
+
     }
 }
